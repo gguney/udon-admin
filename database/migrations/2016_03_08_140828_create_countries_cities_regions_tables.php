@@ -1,0 +1,793 @@
+<?php
+
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Database\Migrations\Migration;
+
+class CreateCountriesCitiesRegionsTables extends Migration
+{
+    /**
+     * Run the migrations.
+     *
+     * @return void
+     */
+    public function up()
+    {
+        Schema::create('countries', function (Blueprint $table) {
+            /*GENERAL FIELDS START*/
+            $table->increments('id');
+            /*
+            $table->dateTime('created_at')->default(DB::raw('CURRENT_TIMESTAMP(0)'));
+            $table->integer('created_user_id')->unsigned();
+            $table->boolean('is_modified')->default('false');
+            $table->dateTime('modified_at')->nullable();
+            $table->integer('modified_user_id')->unsigned()->nullable();
+            $table->boolean('is_deleted')->default('false');
+            $table->dateTime('deleted_at')->nullable();
+            $table->integer('deleted_user_id')->unsigned()->nullable();
+            $table->boolean('is_versioned')->default('false');
+            $table->integer('version')->unsigned();
+            $table->integer('parent_id')->unsigned();
+            /*GENERAL FIELDS END*/
+            $table->string('name', 100)->unique();
+            $table->string('code');
+            $table->string('description', 100)->nullable();
+            $table->string('time_zone', 6)->nullable();
+            $table->timestamps();
+
+        });
+
+        $this->addCountries();
+
+        Schema::create('cities', function (Blueprint $table) {
+            /*GENERAL FIELDS START*/
+            $table->increments('id');
+            /*
+
+            $table->dateTime('created_at')->default(DB::raw('CURRENT_TIMESTAMP(0)'));
+            $table->integer('created_user_id')->unsigned();
+            $table->boolean('is_modified')->default('false');
+            $table->dateTime('modified_at')->nullable();
+            $table->integer('modified_user_id')->unsigned()->nullable();
+            $table->boolean('is_deleted')->default('false');
+            $table->dateTime('deleted_at')->nullable();
+            $table->integer('deleted_user_id')->unsigned()->nullable();
+            $table->boolean('is_versioned')->default('false');
+            $table->integer('version')->unsigned();
+            $table->integer('parent_id')->unsigned();
+            /*GENERAL FIELDS END*/
+            $table->integer('ref_country_id')->unsigned();
+            $table->foreign('ref_country_id')->references('id')->on('countries')->onDelete('cascade')->onUpdate('cascade');
+            $table->string('code')->nullable();
+            $table->string('name', 100)->unique();
+            $table->string('description', 100)->nullable();
+            $table->timestamps();
+
+        });
+
+        $this->addCities();
+
+        Schema::create('regions', function (Blueprint $table) {
+            /*GENERAL FIELDS START*/
+            $table->increments('id');
+
+            /*
+            $table->dateTime('created_at')->default(DB::raw('CURRENT_TIMESTAMP(0)'));
+            $table->integer('created_user_id')->unsigned();
+            $table->boolean('is_modified')->default('false');
+            $table->dateTime('modified_at')->nullable();
+            $table->integer('modified_user_id')->unsigned()->nullable();
+            $table->boolean('is_deleted')->default('false');
+            $table->dateTime('deleted_at')->nullable();
+            $table->integer('deleted_user_id')->unsigned()->nullable();
+            $table->boolean('is_versioned')->default('false');
+            $table->integer('version')->unsigned();
+            $table->integer('parent_id')->unsigned();
+            /*GENERAL FIELDS END*/
+            $table->integer('ref_city_id')->unsigned();
+            $table->foreign('ref_city_id')->references('id')->on('cities')->onDelete('cascade')->onUpdate('cascade');
+            $table->string('name', 100)->unique();
+            $table->string('postal_code')->nullable();
+            $table->string('description', 100)->nullable();
+            $table->timestamps();
+
+        });
+
+        $this->addRegions();
+    }
+
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
+    public function down()
+    {
+        Schema::drop('countries');
+        Schema::drop('cities');
+        Schema::drop('regions');
+    }
+
+    public function addCountries()
+    {
+
+        $countries = array
+        (
+            'TR' => 'Turkey',
+            'AF' => 'Afghanistan',
+            'AX' => 'Aland Islands',
+            'AL' => 'Albania',
+            'DZ' => 'Algeria',
+            'AS' => 'American Samoa',
+            'AD' => 'Andorra',
+            'AO' => 'Angola',
+            'AI' => 'Anguilla',
+            'AQ' => 'Antarctica',
+            'AG' => 'Antigua And Barbuda',
+            'AR' => 'Argentina',
+            'AM' => 'Armenia',
+            'AW' => 'Aruba',
+            'AU' => 'Australia',
+            'AT' => 'Austria',
+            'AZ' => 'Azerbaijan',
+            'BS' => 'Bahamas',
+            'BH' => 'Bahrain',
+            'BD' => 'Bangladesh',
+            'BB' => 'Barbados',
+            'BY' => 'Belarus',
+            'BE' => 'Belgium',
+            'BZ' => 'Belize',
+            'BJ' => 'Benin',
+            'BM' => 'Bermuda',
+            'BT' => 'Bhutan',
+            'BO' => 'Bolivia',
+            'BA' => 'Bosnia And Herzegovina',
+            'BW' => 'Botswana',
+            'BV' => 'Bouvet Island',
+            'BR' => 'Brazil',
+            'IO' => 'British Indian Ocean Territory',
+            'BN' => 'Brunei Darussalam',
+            'BG' => 'Bulgaria',
+            'BF' => 'Burkina Faso',
+            'BI' => 'Burundi',
+            'KH' => 'Cambodia',
+            'CM' => 'Cameroon',
+            'CA' => 'Canada',
+            'CV' => 'Cape Verde',
+            'KY' => 'Cayman Islands',
+            'CF' => 'Central African Republic',
+            'TD' => 'Chad',
+            'CL' => 'Chile',
+            'CN' => 'China',
+            'CX' => 'Christmas Island',
+            'CC' => 'Cocos (Keeling) Islands',
+            'CO' => 'Colombia',
+            'KM' => 'Comoros',
+            'CG' => 'Congo',
+            'CD' => 'Congo, Democratic Republic',
+            'CK' => 'Cook Islands',
+            'CR' => 'Costa Rica',
+            'CI' => 'Cote D\'Ivoire',
+            'HR' => 'Croatia',
+            'CU' => 'Cuba',
+            'CY' => 'Cyprus',
+            'CZ' => 'Czech Republic',
+            'DK' => 'Denmark',
+            'DJ' => 'Djibouti',
+            'DM' => 'Dominica',
+            'DO' => 'Dominican Republic',
+            'EC' => 'Ecuador',
+            'EG' => 'Egypt',
+            'SV' => 'El Salvador',
+            'GQ' => 'Equatorial Guinea',
+            'ER' => 'Eritrea',
+            'EE' => 'Estonia',
+            'ET' => 'Ethiopia',
+            'FK' => 'Falkland Islands (Malvinas)',
+            'FO' => 'Faroe Islands',
+            'FJ' => 'Fiji',
+            'FI' => 'Finland',
+            'FR' => 'France',
+            'GF' => 'French Guiana',
+            'PF' => 'French Polynesia',
+            'TF' => 'French Southern Territories',
+            'GA' => 'Gabon',
+            'GM' => 'Gambia',
+            'GE' => 'Georgia',
+            'DE' => 'Germany',
+            'GH' => 'Ghana',
+            'GI' => 'Gibraltar',
+            'GR' => 'Greece',
+            'GL' => 'Greenland',
+            'GD' => 'Grenada',
+            'GP' => 'Guadeloupe',
+            'GU' => 'Guam',
+            'GT' => 'Guatemala',
+            'GG' => 'Guernsey',
+            'GN' => 'Guinea',
+            'GW' => 'Guinea-Bissau',
+            'GY' => 'Guyana',
+            'HT' => 'Haiti',
+            'HM' => 'Heard Island & Mcdonald Islands',
+            'VA' => 'Holy See (Vatican City State)',
+            'HN' => 'Honduras',
+            'HK' => 'Hong Kong',
+            'HU' => 'Hungary',
+            'IS' => 'Iceland',
+            'IN' => 'India',
+            'ID' => 'Indonesia',
+            'IR' => 'Iran, Islamic Republic Of',
+            'IQ' => 'Iraq',
+            'IE' => 'Ireland',
+            'IM' => 'Isle Of Man',
+            'IL' => 'Israel',
+            'IT' => 'Italy',
+            'JM' => 'Jamaica',
+            'JP' => 'Japan',
+            'JE' => 'Jersey',
+            'JO' => 'Jordan',
+            'KZ' => 'Kazakhstan',
+            'KE' => 'Kenya',
+            'KI' => 'Kiribati',
+            'KR' => 'Korea',
+            'KW' => 'Kuwait',
+            'KG' => 'Kyrgyzstan',
+            'LA' => 'Lao People\'s Democratic Republic',
+            'LV' => 'Latvia',
+            'LB' => 'Lebanon',
+            'LS' => 'Lesotho',
+            'LR' => 'Liberia',
+            'LY' => 'Libyan Arab Jamahiriya',
+            'LI' => 'Liechtenstein',
+            'LT' => 'Lithuania',
+            'LU' => 'Luxembourg',
+            'MO' => 'Macao',
+            'MK' => 'Macedonia',
+            'MG' => 'Madagascar',
+            'MW' => 'Malawi',
+            'MY' => 'Malaysia',
+            'MV' => 'Maldives',
+            'ML' => 'Mali',
+            'MT' => 'Malta',
+            'MH' => 'Marshall Islands',
+            'MQ' => 'Martinique',
+            'MR' => 'Mauritania',
+            'MU' => 'Mauritius',
+            'YT' => 'Mayotte',
+            'MX' => 'Mexico',
+            'FM' => 'Micronesia, Federated States Of',
+            'MD' => 'Moldova',
+            'MC' => 'Monaco',
+            'MN' => 'Mongolia',
+            'ME' => 'Montenegro',
+            'MS' => 'Montserrat',
+            'MA' => 'Morocco',
+            'MZ' => 'Mozambique',
+            'MM' => 'Myanmar',
+            'NA' => 'Namibia',
+            'NR' => 'Nauru',
+            'NP' => 'Nepal',
+            'NL' => 'Netherlands',
+            'AN' => 'Netherlands Antilles',
+            'NC' => 'New Caledonia',
+            'NZ' => 'New Zealand',
+            'NI' => 'Nicaragua',
+            'NE' => 'Niger',
+            'NG' => 'Nigeria',
+            'NU' => 'Niue',
+            'NF' => 'Norfolk Island',
+            'MP' => 'Northern Mariana Islands',
+            'NO' => 'Norway',
+            'OM' => 'Oman',
+            'PK' => 'Pakistan',
+            'PW' => 'Palau',
+            'PS' => 'Palestinian Territory, Occupied',
+            'PA' => 'Panama',
+            'PG' => 'Papua New Guinea',
+            'PY' => 'Paraguay',
+            'PE' => 'Peru',
+            'PH' => 'Philippines',
+            'PN' => 'Pitcairn',
+            'PL' => 'Poland',
+            'PT' => 'Portugal',
+            'PR' => 'Puerto Rico',
+            'QA' => 'Qatar',
+            'RE' => 'Reunion',
+            'RO' => 'Romania',
+            'RU' => 'Russian Federation',
+            'RW' => 'Rwanda',
+            'BL' => 'Saint Barthelemy',
+            'SH' => 'Saint Helena',
+            'KN' => 'Saint Kitts And Nevis',
+            'LC' => 'Saint Lucia',
+            'MF' => 'Saint Martin',
+            'PM' => 'Saint Pierre And Miquelon',
+            'VC' => 'Saint Vincent And Grenadines',
+            'WS' => 'Samoa',
+            'SM' => 'San Marino',
+            'ST' => 'Sao Tome And Principe',
+            'SA' => 'Saudi Arabia',
+            'SN' => 'Senegal',
+            'RS' => 'Serbia',
+            'SC' => 'Seychelles',
+            'SL' => 'Sierra Leone',
+            'SG' => 'Singapore',
+            'SK' => 'Slovakia',
+            'SI' => 'Slovenia',
+            'SB' => 'Solomon Islands',
+            'SO' => 'Somalia',
+            'ZA' => 'South Africa',
+            'GS' => 'South Georgia And Sandwich Isl.',
+            'ES' => 'Spain',
+            'LK' => 'Sri Lanka',
+            'SD' => 'Sudan',
+            'SR' => 'Suriname',
+            'SJ' => 'Svalbard And Jan Mayen',
+            'SZ' => 'Swaziland',
+            'SE' => 'Sweden',
+            'CH' => 'Switzerland',
+            'SY' => 'Syrian Arab Republic',
+            'TW' => 'Taiwan',
+            'TJ' => 'Tajikistan',
+            'TZ' => 'Tanzania',
+            'TH' => 'Thailand',
+            'TL' => 'Timor-Leste',
+            'TG' => 'Togo',
+            'TK' => 'Tokelau',
+            'TO' => 'Tonga',
+            'TT' => 'Trinidad And Tobago',
+            'TN' => 'Tunisia',
+            'TM' => 'Turkmenistan',
+            'TC' => 'Turks And Caicos Islands',
+            'TV' => 'Tuvalu',
+            'UG' => 'Uganda',
+            'UA' => 'Ukraine',
+            'AE' => 'United Arab Emirates',
+            'GB' => 'United Kingdom',
+            'US' => 'United States',
+            'UM' => 'United States Outlying Islands',
+            'UY' => 'Uruguay',
+            'UZ' => 'Uzbekistan',
+            'VU' => 'Vanuatu',
+            'VE' => 'Venezuela',
+            'VN' => 'Viet Nam',
+            'VG' => 'Virgin Islands, British',
+            'VI' => 'Virgin Islands, U.S.',
+            'WF' => 'Wallis And Futuna',
+            'EH' => 'Western Sahara',
+            'YE' => 'Yemen',
+            'ZM' => 'Zambia',
+            'ZW' => 'Zimbabwe',
+        );
+        $countryKeys = array_keys($countries);
+        for ($i = 0; $i < sizeof($countries); $i++) {
+            $data [] = array(
+                'name' => $countries[$countryKeys[$i]],
+                'code' => $countryKeys[$i],
+            );
+        }
+        DB::table('countries')->insert($data);
+    }
+
+    public function addCities()
+    {
+        $turkeysCities = array('', 'Adana', 'Adıyaman', 'Afyon', 'Ağrı', 'Amasya', 'Ankara', 'Antalya', 'Artvin',
+            'Aydın', 'Balıkesir', 'Bilecik', 'Bingöl', 'Bitlis', 'Bolu', 'Burdur', 'Bursa', 'Çanakkale',
+            'Çankırı', 'Çorum', 'Denizli', 'Diyarbakır', 'Edirne', 'Elazığ', 'Erzincan', 'Erzurum', 'Eskişehir',
+            'Gaziantep', 'Giresun', 'Gümüşhane', 'Hakkari', 'Hatay', 'Isparta', 'Mersin', 'İstanbul', 'İzmir',
+            'Kars', 'Kastamonu', 'Kayseri', 'Kırklareli', 'Kırşehir', 'Kocaeli', 'Konya', 'Kütahya', 'Malatya',
+            'Manisa', 'Kahramanmaraş', 'Mardin', 'Muğla', 'Muş', 'Nevşehir', 'Niğde', 'Ordu', 'Rize', 'Sakarya',
+            'Samsun', 'Siirt', 'Sinop', 'Sivas', 'Tekirdağ', 'Tokat', 'Trabzon', 'Tunceli', 'Şanlıurfa', 'Uşak',
+            'Van', 'Yozgat', 'Zonguldak', 'Aksaray', 'Bayburt', 'Karaman', 'Kırıkkale', 'Batman', 'Şırnak',
+            'Bartın', 'Ardahan', 'Iğdır', 'Yalova', 'Karabük', 'Kilis', 'Osmaniye', 'Düzce');
+
+        for ($i = 1; $i < sizeof($turkeysCities); $i++) {
+            $data [] = array(
+                'ref_country_id' => 1,
+                'name' => $turkeysCities[$i],
+                'code' => $i,
+            );
+        }
+        DB::table('cities')->insert($data);
+    }
+    public function addRegions()
+    {
+        $ankaraRegions = array (
+            array('ref_city_id' => '6', 'name' => 'Şehitkubilay', 'postal_code' => '06220'),
+            array('ref_city_id' => '6', 'name' => 'Aktepe', 'postal_code' => '06300'),
+            array('ref_city_id' => '6', 'name' => 'Sanatoryum', 'postal_code' => '06290'),
+            array('ref_city_id' => '6', 'name' => 'Bağlum', 'postal_code' => '06291'),
+            array('ref_city_id' => '6', 'name' => 'Ufuktepe', 'postal_code' => '06280'),
+            array('ref_city_id' => '6', 'name' => 'Şenlik', 'postal_code' => '06310'),
+            array('ref_city_id' => '6', 'name' => 'Esertepe', 'postal_code' => '06220'),
+            array('ref_city_id' => '6', 'name' => 'Etlik', 'postal_code' => '06010'),
+            array('ref_city_id' => '6', 'name' => 'Kalaba', 'postal_code' => '06120'),
+            array('ref_city_id' => '6', 'name' => 'Sihhiye', 'postal_code' => '06430'),
+            array('ref_city_id' => '6', 'name' => 'Öveçler', 'postal_code' => '06460'),
+            array('ref_city_id' => '6', 'name' => 'Merkezköy', 'postal_code' => '06705'),
+            array('ref_city_id' => '6', 'name' => 'Kavaklidere', 'postal_code' => '06680'),
+            array('ref_city_id' => '6', 'name' => 'Bilkent', 'postal_code' => '06800'),
+            array('ref_city_id' => '6', 'name' => 'Balgat', 'postal_code' => '06520'),
+            array('ref_city_id' => '6', 'name' => 'Ayranci', 'postal_code' => '06540'),
+            array('ref_city_id' => '6', 'name' => 'Gaziosmanpaşa', 'postal_code' => '06700'),
+            array('ref_city_id' => '6', 'name' => 'Dikmen', 'postal_code' => '06450'),
+            array('ref_city_id' => '6', 'name' => 'Bahçelievler', 'postal_code' => '06490'),
+            array('ref_city_id' => '6', 'name' => 'Zafertepe', 'postal_code' => '06670'),
+            array('ref_city_id' => '6', 'name' => 'Birlik', 'postal_code' => '06610'),
+            array('ref_city_id' => '6', 'name' => 'Esat', 'postal_code' => '06660'),
+            array('ref_city_id' => '6', 'name' => 'Çankaya', 'postal_code' => '06690'),
+            array('ref_city_id' => '6', 'name' => 'Maltepe', 'postal_code' => '06570'),
+            array('ref_city_id' => '6', 'name' => 'Ahlatlibel', 'postal_code' => '06805'),
+            array('ref_city_id' => '6', 'name' => 'Tbmm', 'postal_code' => '06543'),
+            array('ref_city_id' => '6', 'name' => 'Cebeci', 'postal_code' => '06590'),
+            array('ref_city_id' => '6', 'name' => 'Çayyolu', 'postal_code' => '06810'),
+            array('ref_city_id' => '6', 'name' => 'Söğütözü', 'postal_code' => '06510'),
+            array('ref_city_id' => '6', 'name' => '100.yil', 'postal_code' => '06530'),
+            array('ref_city_id' => '6', 'name' => 'Yildiz', 'postal_code' => '06550'),
+            array('ref_city_id' => '6', 'name' => 'Kizilay', 'postal_code' => '06420'),
+            array('ref_city_id' => '6', 'name' => 'Bumsuz', 'postal_code' => '06860'),
+            array('ref_city_id' => '6', 'name' => 'Yenice', 'postal_code' => '06863'),
+            array('ref_city_id' => '6', 'name' => 'Çaliş', 'postal_code' => '06860'),
+            array('ref_city_id' => '6', 'name' => 'Balçikhisar', 'postal_code' => '06860'),
+            array('ref_city_id' => '6', 'name' => 'Yurtbeyli', 'postal_code' => '06860'),
+            array('ref_city_id' => '6', 'name' => 'Haymana', 'postal_code' => '06860'),
+            array('ref_city_id' => '6', 'name' => 'Kizilcahamam', 'postal_code' => '06890'),
+            array('ref_city_id' => '6', 'name' => 'Boğaziçi', 'postal_code' => '06480'),
+            array('ref_city_id' => '6', 'name' => 'Mamak', 'postal_code' => '06260'),
+            array('ref_city_id' => '6', 'name' => 'Kayaş', 'postal_code' => '06270'),
+            array('ref_city_id' => '6', 'name' => 'Demirlibahçe', 'postal_code' => '06340'),
+            array('ref_city_id' => '6', 'name' => 'Muhabereokulu', 'postal_code' => '06263'),
+            array('ref_city_id' => '6', 'name' => 'Hüseyingazi', 'postal_code' => '06320'),
+            array('ref_city_id' => '6', 'name' => 'Kizilca', 'postal_code' => '06635'),
+            array('ref_city_id' => '6', 'name' => 'Gülveren', 'postal_code' => '06350'),
+            array('ref_city_id' => '6', 'name' => 'Misket', 'postal_code' => '06470'),
+            array('ref_city_id' => '6', 'name' => 'Lalahan', 'postal_code' => '06852'),
+            array('ref_city_id' => '6', 'name' => 'Akdere', 'postal_code' => '06630'),
+            array('ref_city_id' => '6', 'name' => 'Abidinpaşa', 'postal_code' => '06620'),
+            array('ref_city_id' => '6', 'name' => 'Güzelkent', 'postal_code' => '06827'),
+            array('ref_city_id' => '6', 'name' => 'Göksu', 'postal_code' => '06820'),
+            array('ref_city_id' => '6', 'name' => '30ağustos', 'postal_code' => '06794'),
+            array('ref_city_id' => '6', 'name' => 'Elvankent', 'postal_code' => '06796'),
+            array('ref_city_id' => '6', 'name' => 'Etimesgut', 'postal_code' => '06790'),
+            array('ref_city_id' => '6', 'name' => 'Eryamanevleri', 'postal_code' => '06824'),
+            array('ref_city_id' => '6', 'name' => 'Yurtçu', 'postal_code' => '06815'),
+            array('ref_city_id' => '6', 'name' => 'Bahçekapi', 'postal_code' => '06797'),
+            array('ref_city_id' => '6', 'name' => 'Akyurt', 'postal_code' => '06750'),
+            array('ref_city_id' => '6', 'name' => 'Havalimani', 'postal_code' => '06970'),
+            array('ref_city_id' => '6', 'name' => 'Kazan', 'postal_code' => '06980'),
+            array('ref_city_id' => '6', 'name' => 'Çağa', 'postal_code' => '06842'),
+            array('ref_city_id' => '6', 'name' => 'Güdül', 'postal_code' => '06840'),
+            array('ref_city_id' => '6', 'name' => 'Yeşilöz', 'postal_code' => '06844'),
+            array('ref_city_id' => '6', 'name' => 'Sorgun', 'postal_code' => '06843'),
+            array('ref_city_id' => '6', 'name' => 'Çayirhan', 'postal_code' => '06922'),
+            array('ref_city_id' => '6', 'name' => 'Sariyar', 'postal_code' => '06925'),
+            array('ref_city_id' => '6', 'name' => 'Nallihan', 'postal_code' => '06920'),
+            array('ref_city_id' => '6', 'name' => 'Bala', 'postal_code' => '06720'),
+            array('ref_city_id' => '6', 'name' => 'Afşar', 'postal_code' => '06726'),
+            array('ref_city_id' => '6', 'name' => 'Peçenek', 'postal_code' => '06365'),
+            array('ref_city_id' => '6', 'name' => 'Telsizler', 'postal_code' => '06090'),
+            array('ref_city_id' => '6', 'name' => 'Samanpazari', 'postal_code' => '06230'),
+            array('ref_city_id' => '6', 'name' => 'Önder', 'postal_code' => '06165'),
+            array('ref_city_id' => '6', 'name' => 'Hasköy', 'postal_code' => '06140'),
+            array('ref_city_id' => '6', 'name' => 'Altindağ', 'postal_code' => '06080'),
+            array('ref_city_id' => '6', 'name' => 'İskitler', 'postal_code' => '06070'),
+            array('ref_city_id' => '6', 'name' => 'Ulubey', 'postal_code' => '06360'),
+            array('ref_city_id' => '6', 'name' => 'Siteler', 'postal_code' => '06160'),
+            array('ref_city_id' => '6', 'name' => 'Dişkapi', 'postal_code' => '06110'),
+            array('ref_city_id' => '6', 'name' => 'Aydinlikevler', 'postal_code' => '06130'),
+            array('ref_city_id' => '6', 'name' => 'Ulus', 'postal_code' => '06050'),
+            array('ref_city_id' => '6', 'name' => 'Gölbaşi', 'postal_code' => '06830'),
+            array('ref_city_id' => '6', 'name' => 'Fatih', 'postal_code' => '06932'),
+            array('ref_city_id' => '6', 'name' => 'Temelli', 'postal_code' => '06909'),
+            array('ref_city_id' => '6', 'name' => 'Yenikent', 'postal_code' => '06946'),
+            array('ref_city_id' => '6', 'name' => 'Sincan', 'postal_code' => '06930'),
+            array('ref_city_id' => '6', 'name' => 'Mevlana', 'postal_code' => '06949'),
+            array('ref_city_id' => '6', 'name' => 'Ahievran', 'postal_code' => '06935'),
+            array('ref_city_id' => '6', 'name' => 'Plevne', 'postal_code' => '06934'),
+            array('ref_city_id' => '6', 'name' => 'Ertuğrulgazi', 'postal_code' => '06940'),
+            array('ref_city_id' => '6', 'name' => 'Ulubatli', 'postal_code' => '06933'),
+            array('ref_city_id' => '6', 'name' => 'Elmadağ', 'postal_code' => '06780'),
+            array('ref_city_id' => '6', 'name' => 'Hasanoğlan', 'postal_code' => '06850'),
+            array('ref_city_id' => '6', 'name' => 'Sarayköy', 'postal_code' => '06146'),
+            array('ref_city_id' => '6', 'name' => 'Pursaklar', 'postal_code' => '06145'),
+            array('ref_city_id' => '6', 'name' => 'Karşiyaka', 'postal_code' => '06190'),
+            array('ref_city_id' => '6', 'name' => 'Ostim', 'postal_code' => '06374'),
+            array('ref_city_id' => '6', 'name' => 'Macunköy', 'postal_code' => '06105'),
+            array('ref_city_id' => '6', 'name' => 'Yenimahalle', 'postal_code' => '06170'),
+            array('ref_city_id' => '6', 'name' => 'Batikent', 'postal_code' => '06370'),
+            array('ref_city_id' => '6', 'name' => 'İvedik Osb', 'postal_code' => '06378'),
+            array('ref_city_id' => '6', 'name' => 'Şentepe', 'postal_code' => '06210'),
+            array('ref_city_id' => '6', 'name' => 'A.o.çiftliği', 'postal_code' => '06560'),
+            array('ref_city_id' => '6', 'name' => 'Demetevler', 'postal_code' => '06200'),
+            array('ref_city_id' => '6', 'name' => 'Gülhüyük', 'postal_code' => '06950'),
+            array('ref_city_id' => '6', 'name' => 'Kaçarli', 'postal_code' => '06950'),
+            array('ref_city_id' => '6', 'name' => 'Devekovan', 'postal_code' => '06950'),
+            array('ref_city_id' => '6', 'name' => 'Şereflikoçhisar', 'postal_code' => '06950'),
+            array('ref_city_id' => '6', 'name' => 'Çalören', 'postal_code' => '06950'),
+            array('ref_city_id' => '6', 'name' => 'Uruş', 'postal_code' => '06734'),
+            array('ref_city_id' => '6', 'name' => 'Karaşar', 'postal_code' => '06732'),
+            array('ref_city_id' => '6', 'name' => 'Kirbaşi', 'postal_code' => '06733'),
+            array('ref_city_id' => '6', 'name' => 'Beypazari', 'postal_code' => '06730'),
+            array('ref_city_id' => '6', 'name' => 'Çamlidere', 'postal_code' => '06740'),
+            array('ref_city_id' => '6', 'name' => 'Evren', 'postal_code' => '06770'),
+            array('ref_city_id' => '6', 'name' => 'Ayaş', 'postal_code' => '06710'),
+            array('ref_city_id' => '6', 'name' => 'Kalecik', 'postal_code' => '06870'),
+            array('ref_city_id' => '6', 'name' => 'Çubuk', 'postal_code' => '06760'),
+            array('ref_city_id' => '6', 'name' => 'Polatli', 'postal_code' => '06900')
+        );
+
+        $istanbulRegions = array(
+        array('ref_city_id' => '34', 'name' => 'Çatalca', 'postal_code' => '34540'),
+        array('ref_city_id' => '34', 'name' => 'Binkiliç', 'postal_code' => '34550'),
+        array('ref_city_id' => '34', 'name' => 'Çiftlikköy', 'postal_code' => '34562'),
+        array('ref_city_id' => '34', 'name' => 'Çirçir', 'postal_code' => '34070'),
+        array('ref_city_id' => '34', 'name' => 'Yeşilpinar', 'postal_code' => '34065'),
+        array('ref_city_id' => '34', 'name' => 'Kağithane Merkez', 'postal_code' => '34406'),
+        array('ref_city_id' => '34', 'name' => 'Çağlayan', 'postal_code' => '34403'),
+        array('ref_city_id' => '34', 'name' => 'Gürsel', 'postal_code' => '34400'),
+        array('ref_city_id' => '34', 'name' => 'Seyrantepe', 'postal_code' => '34418'),
+        array('ref_city_id' => '34', 'name' => 'Hamidiye', 'postal_code' => '34408'),
+        array('ref_city_id' => '34', 'name' => 'Atakent', 'postal_code' => '34760'),
+        array('ref_city_id' => '34', 'name' => 'Esenşehir', 'postal_code' => '34776'),
+        array('ref_city_id' => '34', 'name' => 'Kazimkarabekir', 'postal_code' => '34766'),
+        array('ref_city_id' => '34', 'name' => 'İdealtepe', 'postal_code' => '34841'),
+        array('ref_city_id' => '34', 'name' => 'Zümrütevler', 'postal_code' => '34852'),
+        array('ref_city_id' => '34', 'name' => 'Cevizli', 'postal_code' => '34846'),
+        array('ref_city_id' => '34', 'name' => 'Aydinevler', 'postal_code' => '34854'),
+        array('ref_city_id' => '34', 'name' => 'Büyükbakkalköy', 'postal_code' => '34858'),
+        array('ref_city_id' => '34', 'name' => 'Yakacik', 'postal_code' => '34876'),
+        array('ref_city_id' => '34', 'name' => 'Orhantepe', 'postal_code' => '34865'),
+        array('ref_city_id' => '34', 'name' => 'Atalar', 'postal_code' => '34862'),
+        array('ref_city_id' => '34', 'name' => 'Kartal', 'postal_code' => '34860'),
+        array('ref_city_id' => '34', 'name' => 'Turgutreis', 'postal_code' => '34930'),
+        array('ref_city_id' => '34', 'name' => 'Mehmetakif', 'postal_code' => '34920'),
+        array('ref_city_id' => '34', 'name' => 'Necipfazil', 'postal_code' => '34925'),
+        array('ref_city_id' => '34', 'name' => 'Ferah', 'postal_code' => '34692'),
+        array('ref_city_id' => '34', 'name' => 'Bulgurlu', 'postal_code' => '34696'),
+        array('ref_city_id' => '34', 'name' => 'Kirazlitepe', 'postal_code' => '34682'),
+        array('ref_city_id' => '34', 'name' => 'Kuzguncuk', 'postal_code' => '34674'),
+        array('ref_city_id' => '34', 'name' => 'Muratreis', 'postal_code' => '34664'),
+        array('ref_city_id' => '34', 'name' => 'Acibadem', 'postal_code' => '34660'),
+        array('ref_city_id' => '34', 'name' => 'Altunizade', 'postal_code' => '34662'),
+        array('ref_city_id' => '34', 'name' => 'Kumburgaz', 'postal_code' => '34530'),
+        array('ref_city_id' => '34', 'name' => 'Celaliye(kamiloba)', 'postal_code' => '34584'),
+        array('ref_city_id' => '34', 'name' => 'Haraççi', 'postal_code' => '34281'),
+        array('ref_city_id' => '34', 'name' => 'Arnavutköy', 'postal_code' => '34275'),
+        array('ref_city_id' => '34', 'name' => 'Bolluca', 'postal_code' => '34287'),
+        array('ref_city_id' => '34', 'name' => 'Durusu', 'postal_code' => '34557'),
+        array('ref_city_id' => '34', 'name' => 'Erenköy', 'postal_code' => '34738'),
+        array('ref_city_id' => '34', 'name' => 'Osmanağa', 'postal_code' => '34714'),
+        array('ref_city_id' => '34', 'name' => 'Ondokuzmayis', 'postal_code' => '34736'),
+        array('ref_city_id' => '34', 'name' => 'Sahrayicedit', 'postal_code' => '34734'),
+        array('ref_city_id' => '34', 'name' => 'Kozyataği', 'postal_code' => '34742'),
+        array('ref_city_id' => '34', 'name' => 'Bostanci', 'postal_code' => '34744'),
+        array('ref_city_id' => '34', 'name' => 'Rasimpaşa', 'postal_code' => '34716'),
+        array('ref_city_id' => '34', 'name' => 'Yildiztabya', 'postal_code' => '34240'),
+        array('ref_city_id' => '34', 'name' => 'Küçükköy', 'postal_code' => '34250'),
+        array('ref_city_id' => '34', 'name' => 'Kumkapi', 'postal_code' => '34130'),
+        array('ref_city_id' => '34', 'name' => 'Vefa', 'postal_code' => '34134'),
+        array('ref_city_id' => '34', 'name' => 'Tahtakale', 'postal_code' => '34116'),
+        array('ref_city_id' => '34', 'name' => 'Eminönü', 'postal_code' => '34110'),
+        array('ref_city_id' => '34', 'name' => 'Balat', 'postal_code' => '34087'),
+        array('ref_city_id' => '34', 'name' => 'İskenderpaşa', 'postal_code' => '34080'),
+        array('ref_city_id' => '34', 'name' => 'Yedikule', 'postal_code' => '34107'),
+        array('ref_city_id' => '34', 'name' => 'Şehremini', 'postal_code' => '34104'),
+        array('ref_city_id' => '34', 'name' => 'Aksaray', 'postal_code' => '34096'),
+        array('ref_city_id' => '34', 'name' => 'Sultanahmet', 'postal_code' => '34122'),
+        array('ref_city_id' => '34', 'name' => 'Sirkeci', 'postal_code' => '34112'),
+        array('ref_city_id' => '34', 'name' => 'Kirazli', 'postal_code' => '34210'),
+        array('ref_city_id' => '34', 'name' => 'Bağcilar', 'postal_code' => '34200'),
+        array('ref_city_id' => '34', 'name' => 'Güneşli', 'postal_code' => '34212'),
+        array('ref_city_id' => '34', 'name' => 'Barbaros', 'postal_code' => '34203'),
+        array('ref_city_id' => '34', 'name' => 'Soğanli', 'postal_code' => '34183'),
+        array('ref_city_id' => '34', 'name' => 'Kocasinan', 'postal_code' => '34192'),
+        array('ref_city_id' => '34', 'name' => 'Yenibosna', 'postal_code' => '34197'),
+        array('ref_city_id' => '34', 'name' => 'Türkali', 'postal_code' => '34357'),
+        array('ref_city_id' => '34', 'name' => 'Abbasağa', 'postal_code' => '34353'),
+        array('ref_city_id' => '34', 'name' => 'Levazim', 'postal_code' => '34340'),
+        array('ref_city_id' => '34', 'name' => 'Ortaköy', 'postal_code' => '34347'),
+        array('ref_city_id' => '34', 'name' => 'Avcilar', 'postal_code' => '34310'),
+        array('ref_city_id' => '34', 'name' => 'Florya', 'postal_code' => '34153'),
+        array('ref_city_id' => '34', 'name' => 'Ataköy', 'postal_code' => '34158'),
+        array('ref_city_id' => '34', 'name' => 'Zuhuratbaba', 'postal_code' => '34147'),
+        array('ref_city_id' => '34', 'name' => 'Osmaniye', 'postal_code' => '34146'),
+        array('ref_city_id' => '34', 'name' => 'Sanayi', 'postal_code' => '34235'),
+        array('ref_city_id' => '34', 'name' => 'Esenler', 'postal_code' => '34220'),
+        array('ref_city_id' => '34', 'name' => 'Halicioğlu', 'postal_code' => '34445'),
+        array('ref_city_id' => '34', 'name' => 'İstiklal', 'postal_code' => '34430'),
+        array('ref_city_id' => '34', 'name' => 'Cihangir', 'postal_code' => '34433'),
+        array('ref_city_id' => '34', 'name' => 'Tarlabaşi', 'postal_code' => '34435'),
+        array('ref_city_id' => '34', 'name' => 'Kasimpaşa', 'postal_code' => '34440'),
+        array('ref_city_id' => '34', 'name' => 'Sariyer', 'postal_code' => '34450'),
+        array('ref_city_id' => '34', 'name' => 'Maslak', 'postal_code' => '34398'),
+        array('ref_city_id' => '34', 'name' => 'Emirgan', 'postal_code' => '34467'),
+        array('ref_city_id' => '34', 'name' => 'Bahçeköy', 'postal_code' => '34473'),
+        array('ref_city_id' => '34', 'name' => 'Rumelihisari', 'postal_code' => '34470'),
+        array('ref_city_id' => '34', 'name' => 'Tarabya', 'postal_code' => '34457'),
+        array('ref_city_id' => '34', 'name' => 'Paşabahçe', 'postal_code' => '34800'),
+        array('ref_city_id' => '34', 'name' => 'Çavuşbaşi', 'postal_code' => '34830'),
+        array('ref_city_id' => '34', 'name' => 'Çirpici', 'postal_code' => '34025'),
+        array('ref_city_id' => '34', 'name' => 'Seyitnizam', 'postal_code' => '34015'),
+        array('ref_city_id' => '34', 'name' => 'Sultangazi', 'postal_code' => '34270'),
+        array('ref_city_id' => '34', 'name' => 'Sultançiftliği', 'postal_code' => '34265'),
+        array('ref_city_id' => '34', 'name' => 'Zübeydehanim', 'postal_code' => '34260'),
+        array('ref_city_id' => '34', 'name' => 'Akincilar', 'postal_code' => '34160'),
+        array('ref_city_id' => '34', 'name' => 'Tozkoparan', 'postal_code' => '34173'),
+        array('ref_city_id' => '34', 'name' => 'Yakuplu', 'postal_code' => '34524'),
+        array('ref_city_id' => '34', 'name' => 'Gürpinar', 'postal_code' => '34528'),
+        array('ref_city_id' => '34', 'name' => 'Çekmeköy', 'postal_code' => '34782'),
+        array('ref_city_id' => '34', 'name' => 'Alemdağ', 'postal_code' => '34794'),
+        array('ref_city_id' => '34', 'name' => 'Yayalar', 'postal_code' => '34909'),
+        array('ref_city_id' => '34', 'name' => 'Çamçeşme', 'postal_code' => '34899'),
+        array('ref_city_id' => '34', 'name' => 'Esenyali', 'postal_code' => '34903'),
+        array('ref_city_id' => '34', 'name' => 'Kayişdaği', 'postal_code' => '34755'),
+        array('ref_city_id' => '34', 'name' => 'Örnek', 'postal_code' => '34704'),
+        array('ref_city_id' => '34', 'name' => 'İçerenköy', 'postal_code' => '34752'),
+        array('ref_city_id' => '34', 'name' => 'Yeniçamlica', 'postal_code' => '34779'),
+        array('ref_city_id' => '34', 'name' => 'Yenisahra', 'postal_code' => '34746'),
+        array('ref_city_id' => '34', 'name' => 'Ferhatpaşa', 'postal_code' => '34888'),
+        array('ref_city_id' => '34', 'name' => 'Halkali', 'postal_code' => '34303'),
+        array('ref_city_id' => '34', 'name' => 'Küçükçekmece', 'postal_code' => '34290'),
+        array('ref_city_id' => '34', 'name' => 'Muratpaşa', 'postal_code' => '34040'),
+        array('ref_city_id' => '34', 'name' => 'Selimpaşa', 'postal_code' => '34590'),
+        array('ref_city_id' => '34', 'name' => 'Çanta', 'postal_code' => '34580'),
+        array('ref_city_id' => '34', 'name' => 'Silivri', 'postal_code' => '34570'),
+        array('ref_city_id' => '34', 'name' => 'İkitelli', 'postal_code' => '34490'),
+        array('ref_city_id' => '34', 'name' => 'Orhanli', 'postal_code' => '34956'),
+        array('ref_city_id' => '34', 'name' => 'Tersaneler', 'postal_code' => '34944'),
+        array('ref_city_id' => '34', 'name' => 'Akfirat', 'postal_code' => '34959'),
+        array('ref_city_id' => '34', 'name' => 'Aydinli', 'postal_code' => '34953'),
+        array('ref_city_id' => '34', 'name' => 'Ağva', 'postal_code' => '34990'),
+        array('ref_city_id' => '34', 'name' => 'Şile', 'postal_code' => '34980'),
+        array('ref_city_id' => '34', 'name' => 'Kiraç', 'postal_code' => '34522'),
+        array('ref_city_id' => '34', 'name' => 'Mehterçeşme', 'postal_code' => '34515'),
+        array('ref_city_id' => '34', 'name' => 'Esenyurt', 'postal_code' => '34517'),
+        array('ref_city_id' => '34', 'name' => 'Saadetdere', 'postal_code' => '34513'),
+        array('ref_city_id' => '34', 'name' => 'Pangalti', 'postal_code' => '34373'),
+        array('ref_city_id' => '34', 'name' => '19mayis', 'postal_code' => '34360'),
+        array('ref_city_id' => '34', 'name' => 'Mecidiyeköy', 'postal_code' => '34387'),
+        array('ref_city_id' => '34', 'name' => 'Okmeydani', 'postal_code' => '34384'),
+        array('ref_city_id' => '34', 'name' => 'Halaskargazi', 'postal_code' => '34371'),
+        array('ref_city_id' => '34', 'name' => 'Sarigazi', 'postal_code' => '34785'),
+        array('ref_city_id' => '34', 'name' => 'Eyüpsultan', 'postal_code' => '34885'),
+        array('ref_city_id' => '34', 'name' => 'Büyükada', 'postal_code' => '34970'),
+
+        );
+
+        $izmirRegions = array(
+            array('ref_city_id' => '35', 'name' => 'Ören', 'postal_code' => '35733'),
+            array('ref_city_id' => '35', 'name' => 'Yukarikizilca', 'postal_code' => '35740'),
+            array('ref_city_id' => '35', 'name' => 'Armutlu', 'postal_code' => '35737'),
+            array('ref_city_id' => '35', 'name' => 'Bağyurdu', 'postal_code' => '35743'),
+            array('ref_city_id' => '35', 'name' => 'Ulucak', 'postal_code' => '35735'),
+            array('ref_city_id' => '35', 'name' => 'Kemalpaşa', 'postal_code' => '35730'),
+            array('ref_city_id' => '35', 'name' => 'Atatürk', 'postal_code' => '35030'),
+            array('ref_city_id' => '35', 'name' => 'Bornova', 'postal_code' => '35040'),
+            array('ref_city_id' => '35', 'name' => 'Naldöken', 'postal_code' => '35050'),
+            array('ref_city_id' => '35', 'name' => 'Çamdibi', 'postal_code' => '35090'),
+            array('ref_city_id' => '35', 'name' => 'Pinarbaşi', 'postal_code' => '35060'),
+            array('ref_city_id' => '35', 'name' => 'İşikkent', 'postal_code' => '35070'),
+            array('ref_city_id' => '35', 'name' => 'Kazimdirik', 'postal_code' => '35100'),
+            array('ref_city_id' => '35', 'name' => 'Menderes Ptt Merkezi', 'postal_code' => '35470'),
+            array('ref_city_id' => '35', 'name' => 'Ataköy Ptt Acentesi', 'postal_code' => '35479'),
+            array('ref_city_id' => '35', 'name' => 'Çileme Ptt Acentesi', 'postal_code' => '35474'),
+            array('ref_city_id' => '35', 'name' => 'Gümüldür', 'postal_code' => '35480'),
+            array('ref_city_id' => '35', 'name' => 'Tekeli Ptt Acentesi', 'postal_code' => '35477'),
+            array('ref_city_id' => '35', 'name' => 'Değirmendere Ptt Acentesi', 'postal_code' => '35472'),
+            array('ref_city_id' => '35', 'name' => 'Görece Ptt Şb', 'postal_code' => '35473'),
+            array('ref_city_id' => '35', 'name' => 'Kisik Sanayi Sitesi Ptt Şb', 'postal_code' => '35476'),
+            array('ref_city_id' => '35', 'name' => 'Oğlananasi Ptt Acentesi', 'postal_code' => '35475'),
+            array('ref_city_id' => '35', 'name' => 'Özdere', 'postal_code' => '35495'),
+            array('ref_city_id' => '35', 'name' => 'Develi Ptt Acentesi', 'postal_code' => '35478'),
+            array('ref_city_id' => '35', 'name' => 'Narlidere', 'postal_code' => '35320'),
+            array('ref_city_id' => '35', 'name' => 'Gürçeşme', 'postal_code' => '35180'),
+            array('ref_city_id' => '35', 'name' => 'Gültepe', 'postal_code' => '35190'),
+            array('ref_city_id' => '35', 'name' => 'Eşrefpaşa', 'postal_code' => '35270'),
+            array('ref_city_id' => '35', 'name' => 'Alsancak', 'postal_code' => '35220'),
+            array('ref_city_id' => '35', 'name' => 'Basmane', 'postal_code' => '35240'),
+            array('ref_city_id' => '35', 'name' => 'Kahramanlar', 'postal_code' => '35230'),
+            array('ref_city_id' => '35', 'name' => 'Konak', 'postal_code' => '35260'),
+            array('ref_city_id' => '35', 'name' => 'Küçükyali', 'postal_code' => '35280'),
+            array('ref_city_id' => '35', 'name' => 'Pasaport', 'postal_code' => '35210'),
+            array('ref_city_id' => '35', 'name' => 'Kemeralti', 'postal_code' => '35250'),
+            array('ref_city_id' => '35', 'name' => 'İmbatli', 'postal_code' => '35575'),
+            array('ref_city_id' => '35', 'name' => 'Nergiz', 'postal_code' => '35560'),
+            array('ref_city_id' => '35', 'name' => 'Denizbostanlisi', 'postal_code' => '35590'),
+            array('ref_city_id' => '35', 'name' => 'Yali', 'postal_code' => '35550'),
+            array('ref_city_id' => '35', 'name' => 'Alaybey', 'postal_code' => '35600'),
+            array('ref_city_id' => '35', 'name' => 'Cumhuriyet', 'postal_code' => '35570'),
+            array('ref_city_id' => '35', 'name' => 'Dikili', 'postal_code' => '35980'),
+            array('ref_city_id' => '35', 'name' => 'Çandarli', 'postal_code' => '35985'),
+            array('ref_city_id' => '35', 'name' => 'Güzelbahçe', 'postal_code' => '35310'),
+            array('ref_city_id' => '35', 'name' => 'Büyükçiğli', 'postal_code' => '35640'),
+            array('ref_city_id' => '35', 'name' => 'Egekent', 'postal_code' => '35610'),
+            array('ref_city_id' => '35', 'name' => 'Harmandali', 'postal_code' => '35650'),
+            array('ref_city_id' => '35', 'name' => 'İstasyonalti', 'postal_code' => '35630'),
+            array('ref_city_id' => '35', 'name' => 'Çiğli', 'postal_code' => '35620'),
+            array('ref_city_id' => '35', 'name' => 'Emiralem', 'postal_code' => '35670'),
+            array('ref_city_id' => '35', 'name' => 'Menemen', 'postal_code' => '35660'),
+            array('ref_city_id' => '35', 'name' => 'Seyrek', 'postal_code' => '35665'),
+            array('ref_city_id' => '35', 'name' => 'Koyundere', 'postal_code' => '35672'),
+            array('ref_city_id' => '35', 'name' => 'Ulukent', 'postal_code' => '35663'),
+            array('ref_city_id' => '35', 'name' => 'Asarlik', 'postal_code' => '35667'),
+            array('ref_city_id' => '35', 'name' => 'Türkelli', 'postal_code' => '35676'),
+            array('ref_city_id' => '35', 'name' => 'Foça', 'postal_code' => '35680'),
+            array('ref_city_id' => '35', 'name' => 'Yenifoça', 'postal_code' => '35687'),
+            array('ref_city_id' => '35', 'name' => 'Bağarasi', 'postal_code' => '35683'),
+            array('ref_city_id' => '35', 'name' => 'Gerenköy', 'postal_code' => '35680'),
+            array('ref_city_id' => '35', 'name' => 'Helvaci', 'postal_code' => '35820'),
+            array('ref_city_id' => '35', 'name' => 'Yenişakran', 'postal_code' => '35810'),
+            array('ref_city_id' => '35', 'name' => 'Aliağa', 'postal_code' => '35800'),
+            array('ref_city_id' => '35', 'name' => 'Bayrakli', 'postal_code' => '35530'),
+            array('ref_city_id' => '35', 'name' => 'Gümüşpala', 'postal_code' => '35510'),
+            array('ref_city_id' => '35', 'name' => 'Alpaslan', 'postal_code' => '35540'),
+            array('ref_city_id' => '35', 'name' => 'Soğukkuyu', 'postal_code' => '35520'),
+            array('ref_city_id' => '35', 'name' => 'Manavkuyu', 'postal_code' => '35535'),
+            array('ref_city_id' => '35', 'name' => 'Çeşme', 'postal_code' => '35930'),
+            array('ref_city_id' => '35', 'name' => 'Alaçati', 'postal_code' => '35937'),
+            array('ref_city_id' => '35', 'name' => 'Yazibaşi', 'postal_code' => '35875'),
+            array('ref_city_id' => '35', 'name' => 'Ayrancilar', 'postal_code' => '35870'),
+            array('ref_city_id' => '35', 'name' => 'Torbali', 'postal_code' => '35860'),
+            array('ref_city_id' => '35', 'name' => 'Pancar', 'postal_code' => '35865'),
+            array('ref_city_id' => '35', 'name' => 'Çaybaşi', 'postal_code' => '35880'),
+            array('ref_city_id' => '35', 'name' => 'Subaşi', 'postal_code' => '35885'),
+            array('ref_city_id' => '35', 'name' => 'Çayli', 'postal_code' => '35762'),
+            array('ref_city_id' => '35', 'name' => 'Konakli', 'postal_code' => '35767'),
+            array('ref_city_id' => '35', 'name' => 'Kaymakçi', 'postal_code' => '35765'),
+            array('ref_city_id' => '35', 'name' => 'Bademli', 'postal_code' => '35753'),
+            array('ref_city_id' => '35', 'name' => 'Birgi', 'postal_code' => '35755'),
+            array('ref_city_id' => '35', 'name' => 'Bozdağ', 'postal_code' => '35773'),
+            array('ref_city_id' => '35', 'name' => 'Ödemiş', 'postal_code' => '35750'),
+            array('ref_city_id' => '35', 'name' => 'Gölcük', 'postal_code' => '35761'),
+            array('ref_city_id' => '35', 'name' => 'Ovakent', 'postal_code' => '35780'),
+            array('ref_city_id' => '35', 'name' => 'Kayaköy', 'postal_code' => '35763'),
+            array('ref_city_id' => '35', 'name' => 'Selçuk', 'postal_code' => '35920'),
+            array('ref_city_id' => '35', 'name' => 'Belevi', 'postal_code' => '35925'),
+            array('ref_city_id' => '35', 'name' => 'Bayindir', 'postal_code' => '35840'),
+            array('ref_city_id' => '35', 'name' => 'Zeytinova', 'postal_code' => '35847'),
+            array('ref_city_id' => '35', 'name' => 'Canli', 'postal_code' => '35845'),
+            array('ref_city_id' => '35', 'name' => 'Çirpi', 'postal_code' => '35843'),
+            array('ref_city_id' => '35', 'name' => 'İşçievleri', 'postal_code' => '35370'),
+            array('ref_city_id' => '35', 'name' => 'Buca', 'postal_code' => '35390'),
+            array('ref_city_id' => '35', 'name' => 'Evka1', 'postal_code' => '35400'),
+            array('ref_city_id' => '35', 'name' => 'Kaynaklar', 'postal_code' => '35395'),
+            array('ref_city_id' => '35', 'name' => 'Şirinyer', 'postal_code' => '35380'),
+            array('ref_city_id' => '35', 'name' => 'Fahrettinaltay', 'postal_code' => '35140'),
+            array('ref_city_id' => '35', 'name' => 'Kibar', 'postal_code' => '35120'),
+            array('ref_city_id' => '35', 'name' => 'Karabağlar', 'postal_code' => '35130'),
+            array('ref_city_id' => '35', 'name' => 'Hatay', 'postal_code' => '35150'),
+            array('ref_city_id' => '35', 'name' => 'Yeşilyurt', 'postal_code' => '35160'),
+            array('ref_city_id' => '35', 'name' => 'Zincirlikuyu', 'postal_code' => '35110'),
+            array('ref_city_id' => '35', 'name' => 'Göçbeyli', 'postal_code' => '35730'),
+            array('ref_city_id' => '35', 'name' => 'Yukaribey', 'postal_code' => '35729'),
+            array('ref_city_id' => '35', 'name' => 'Bergama', 'postal_code' => '35700'),
+            array('ref_city_id' => '35', 'name' => 'Zeytindağ', 'postal_code' => '35720'),
+            array('ref_city_id' => '35', 'name' => 'Ayaskent', 'postal_code' => '35715'),
+            array('ref_city_id' => '35', 'name' => 'Bölcek', 'postal_code' => '35727'),
+            array('ref_city_id' => '35', 'name' => 'Tire', 'postal_code' => '35900'),
+            array('ref_city_id' => '35', 'name' => 'Gökçen', 'postal_code' => '35910'),
+            array('ref_city_id' => '35', 'name' => 'Yayakent', 'postal_code' => '35990'),
+            array('ref_city_id' => '35', 'name' => 'Poyracik', 'postal_code' => '35990'),
+            array('ref_city_id' => '35', 'name' => 'Balçova', 'postal_code' => '35330'),
+            array('ref_city_id' => '35', 'name' => 'Mordoğan', 'postal_code' => '35970'),
+            array('ref_city_id' => '35', 'name' => 'Karaburun', 'postal_code' => '35960'),
+            array('ref_city_id' => '35', 'name' => 'Urla', 'postal_code' => '35430'),
+            array('ref_city_id' => '35', 'name' => 'Kiraz', 'postal_code' => '35890'),
+            array('ref_city_id' => '35', 'name' => 'Ulaştirmaokulu', 'postal_code' => '35425'),
+            array('ref_city_id' => '35', 'name' => 'Havateknik', 'postal_code' => '35415'),
+            array('ref_city_id' => '35', 'name' => 'Gaziemir', 'postal_code' => '35410'),
+            array('ref_city_id' => '35', 'name' => 'Ürkmez', 'postal_code' => '35485'),
+            array('ref_city_id' => '35', 'name' => 'Seferihisar', 'postal_code' => '35460'),
+            array('ref_city_id' => '35', 'name' => 'Doğanbey', 'postal_code' => '35465'),
+            array('ref_city_id' => '35', 'name' => 'Beydağ', 'postal_code' => '35790')
+        );
+
+        DB::table('regions')->insert($ankaraRegions);
+        DB::table('regions')->insert($istanbulRegions);
+        DB::table('regions')->insert($izmirRegions);
+
+
+
+
+    }
+}
+
